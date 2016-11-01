@@ -1,8 +1,11 @@
 package com.linkcard.cam802;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,16 +17,21 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,11 +52,31 @@ import com.linkcard.media.LinkVideoCore;
 import com.linkcard.media.LinkVideoView;
 import com.linkcard.media.LinkVideoView.LinkVideoViewListener;
 import com.topeet.serialtest.ServiceTest;
+import com.topeet.serialtest.SocThread;
 import com.topeet.serialtest.serial;
 
 public class MainActivity extends Activity implements OnClickListener, LinkVideoViewListener {
 	
 	serial com3 = new serial();
+	
+	/**************************/
+	//SocThread数据传输相关
+	private String TAG = "===Client===";
+	private TextView tvInfo = null;
+	Handler mhandler;
+	Handler mhandlerSend;
+	boolean isRun = true;
+	EditText edtsendms;
+	Button btnsend;
+	private String sendstr = "";
+	SharedPreferences sp;
+	Button btnSetting;
+	private Context ctx;
+	Socket socket;
+	PrintWriter out;
+	BufferedReader in;
+	SocThread socketThread;
+	/*************************/
 
 	private TextView mTxtRecorderTimer;
 	private ImageButton mBtnRecordMobile, mBtnPlayPause;
@@ -68,19 +96,24 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	
 	private boolean isForceExit = false;
 	
+	private boolean isInput = false; //用于输入流循环
+	
 	private Intent startIntent;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
-
+		
+		/****** Service后台程序
 		startIntent = new Intent(MainActivity.this, ServiceTest.class);
 		startService(startIntent);//启动服务
 		Log.d("ServiceText", "Intent onCreate");
-
+		*/
 		
 		linkStream = new LinkVideoCore();
 		linkStream.sysinit();//系统初始化
+		
+		tvInfo = (TextView) findViewById(R.id.tvInfo);
 		
 		mTxtRecorderTimer = (TextView) findViewById(R.id.mRecorderTimer);
 		
@@ -105,11 +138,41 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		mVideoView = (LinkVideoView) findViewById(R.id.mVideoView);
 		mVideoView.setLinkVideoViewListener(this);
 		
-		checkValidation();
+		tvInfo.setBackgroundColor(Color.argb(255, 0, 255, 0));
 		
-		//Intent intent = new Intent();
+		checkValidation();
+		/*线程启动项*/
+		//com3.Open(3, 115200);
+		
+		//创建异步任务
+		mhandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				try {
+					Log.i(TAG, "mhandler接收到msg=" + msg.what);
+					if (msg.obj != null) {
+						String s = msg.obj.toString();
+						if (s.trim().length() > 0) {
+							Log.i(TAG, "mhandler接收到obj=" + s);
+							Log.i(TAG, "开始更新UI");
+							tvInfo.append("Server:" + s);
+							Log.i(TAG, "更新UI完毕");
+						} else {
+							Log.i(TAG, "没有数据返回不更新");
+						}
+					}
+				} catch (Exception ee) {
+					Log.i(TAG, "加载过程出现异常");
+					ee.printStackTrace();
+				}
+			}
+		};startSocket();
 	}
 	
+	public void startSocket() {
+		socketThread = new SocThread();
+		socketThread.start();
+	}
 
 	@Override
 	protected void onResume() {
