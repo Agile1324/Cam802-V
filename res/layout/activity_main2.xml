@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mRelativeLayoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.linkcard.media.LinkVideoView
+        android:id="@+id/mVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:id="@+id/mPB"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/mRecorderTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/view_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="18dp"
+        android:layout_marginRight="12.5dp"
+        android:drawableLeft="@drawable/red"
+        android:text="00:00"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="67.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#88222222"
+        android:orientation="horizontal" >
+        
+        <ImageButton
+            android:id="@+id/mBtnPlayPause"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_play" />        
+        
+        <ImageButton
+            android:id="@+id/mBtnRecordMobile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/button_record" />
+        
+        <ImageButton
+            android:visibility="gone"
+            android:id="@+id/mBtnRecordDV"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/button_rec_to_disk" />        
+
+
+        <ImageButton
+            android:id="@+id/mBtnSnapshot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/button_snapshot" />
+
+        <ImageButton
+            android:id="@+id/mBtnWifiOnOff"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/wifi_disabled" />
+        
+        <ImageButton
+            android:id="@+id/mBtnFileBrowser"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/button_playback_default" />
+        <ImageButton
+            android:id="@+id/mBtnSetting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/button_option" />                
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mRelativeLayoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.linkcard.media.LinkVideoView
+        android:id="@+id/mVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:id="@+id/mPB"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/mRecorderTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/view_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="18dp"
+        android:layout_marginRight="12.5dp"
+        android:drawableLeft="@drawable/red"
+        android:text="00:00"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="67.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#88222222"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/mBtnPlay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_play" />
+
+        <ImageButton
+            android:id="@+id/mBtnTakePicture"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_photo" />
+
+        <ImageButton
+            android:id="@+id/mBtnRecord"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_video" />
+
+        <ImageButton
+            android:id="@+id/mBtnScreenSnapshot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_printscreen" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color><!--黑色 -->
+    <color name="btntextcolor">#ff1E90FF</color><!--dialog中按钮字体颜色 -->
+    
+        <drawable name="transparent_background">#00000000</drawable>
+    <drawable name="translucent_background">#6033B5E5</drawable>
+    <drawable name="dialog_button_normal">#333</drawable>
+    <color name="backgroud">#BB444444</color>
+    <color name="font">#ffffff</color>
+</resources>

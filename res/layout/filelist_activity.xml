@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/ll_footBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#202020"
+        android:paddingTop="13dp"
+        android:paddingBottom="12dp">
+
+        <ImageButton
+            android:id="@+id/ib_back_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+	    android:src="@drawable/returnback_button_select"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/rg_view_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true">
+
+            <RadioButton
+                android:id="@+id/rb_image_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null" 
+                android:checked="true"
+                android:gravity="center"
+                android:text="All"
+                android:textColor="@color/color_radiobutton"  
+                android:textSize="20sp" 
+            	android:textStyle="bold"
+            	android:focusable="true"
+            	android:paddingLeft="10dp"
+            	android:paddingRight="10dp"/>
+
+            <View
+	            android:id="@+id/ViewSplit0"
+	            android:layout_width="2dp"
+	            android:layout_height="26dp"
+	            android:background="#80FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rb_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+		android:button="@null" 
+                android:gravity="center"
+                android:text="Video"
+                android:textColor="@color/color_radiobutton" 
+                android:textSize="20sp" 
+            	android:textStyle="bold"
+            	android:focusable="true"
+            	android:paddingLeft="10dp"
+            	android:paddingRight="10dp"/>
+
+            <View
+	            android:id="@+id/ViewSplit1"
+	            android:layout_width="2dp"
+	            android:layout_height="26dp"
+	            android:background="#80FFFFFF"/>
+
+            <RadioButton
+                android:id="@+id/rb_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:button="@null" 
+                android:gravity="center"
+                android:text="Picture"
+                android:textColor="@color/color_radiobutton"  
+                android:textSize="20sp" 
+            	android:textStyle="bold"
+            	android:focusable="true"
+            	android:paddingLeft="10dp"
+            	android:paddingRight="10dp"/>
+        </RadioGroup>
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:listSelector="@drawable/list_selector_holo_dark" />
+
+</LinearLayout>

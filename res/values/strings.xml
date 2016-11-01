@@ -1,0 +1,42 @@
+<resources>
+
+    <string name="app_name">Cam802</string>
+    <string name="str_change_wifi_name">Change Wifi Name</string>
+    <string name="str_input_new_wifi_name">please input new name...</string>
+    <string name="str_change_wifi_pwd">Change Wi-Fi Password</string>
+    <string name="str_input_new_wifi_pwd">please input new password...</string>
+    <string name="str_factory_default">Factory Default</string>
+    <string name="str_factory_default_prompt">Do you want to factory default ?</string>
+    
+    <string name="prompt">TIPS</string>
+    <string name="exit_app">Do you want to quit ?</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="dismiss">Dismiss</string>
+    
+    	<color name="btn_bg_normal">#000000</color>
+	<color name="btn_bg_red">#FF0000</color>
+	
+	   <string name="menu_delete_all_confirm">Delete All</string>
+   <string name="delete_all_confirm">Are you sure to delete all ?</string>
+   <string name="delete_dialog_msg">Deleting...</string>
+   <string name="delete_failed">Failed to delete.</string>
+   <string name="not_enough_space">Memory is full.</string>
+	 <string name="save_photo_ok">Saved a picture.</string>
+	 
+	   <string name="system_warning">Warning</string>
+    <string name="confirmDelete">Are you sure to delete:\n</string>
+    <string name="menu_delete">Delete it</string>
+    <string name="menu_detail">Detail</string>
+    <string name="menu_other">Others</string>
+    <string name="title_preview">Picture/Video</string>
+    <string name="preview_cate">Type:</string>
+    
+       <string name="preview_file">Picture/Video</string>
+    <string name="preview_file_all">All</string>
+    <string name="preview_file_photo">Picture</string>
+    <string name="preview_file_video">Video</string>
+    <string name="confirm_dlg_yes">OK</string>
+    <string name="confirm_dlg_cancel">Cancel</string>
+
+</resources>

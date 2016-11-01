@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/file_longclick_list_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202020"
+    android:cacheColorHint="@android:color/transparent"
+    android:divider="#ccc"
+    android:dividerHeight="1dp"
+    android:listSelector="@drawable/list_selector_holo_dark" />

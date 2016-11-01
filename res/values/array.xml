@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+ 
+
+    <string-array name="menuArray">
+        <item>@string/menu_delete</item>
+        <item>@string/menu_delete_all_confirm</item>
+        <item>@string/confirm_dlg_cancel</item>
+     
+    </string-array>
+</resources>
