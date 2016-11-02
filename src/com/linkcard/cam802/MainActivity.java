@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.InvalidParameterException;
@@ -68,14 +70,13 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	boolean isRun = true;
 	EditText edtsendms;
 	Button btnsend;
-	private String sendstr = "";
 	SharedPreferences sp;
 	Button btnSetting;
-	private Context ctx;
 	Socket socket;
 	PrintWriter out;
 	BufferedReader in;
 	SocThread socketThread;
+	
 	/*************************/
 
 	private TextView mTxtRecorderTimer;
@@ -99,6 +100,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	private boolean isInput = false; //用于输入流循环
 	
 	private Intent startIntent;
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,6 +146,21 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		/*线程启动项*/
 		//com3.Open(3, 115200);
 		
+		//接收wifi数据
+		BufferedReader  inputReader = null;
+		BufferedReader  wifiReader = null;
+		Socket socket = null;
+		
+		try{
+			socket = new Socket("192.168.11.123", 2001);//链接
+			wifiReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			inputReader = new BufferedReader(new InputStreamReader(null));
+			startServerReplyListener(wifiReader);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		
+		
 		//创建异步任务
 		mhandler = new Handler() {
 			@Override
@@ -169,6 +186,24 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		};startSocket();
 	}
 	
+	private void startServerReplyListener(final BufferedReader wifiReader) {
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String response;
+					while ((response = wifiReader.readLine()) != null) {
+						Log.d("socket thread", "Data 已接收" + response);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
+	}
+
 	public void startSocket() {
 		socketThread = new SocThread();
 		socketThread.start();

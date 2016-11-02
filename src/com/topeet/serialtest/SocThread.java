@@ -36,18 +36,9 @@ public class SocThread extends Thread{
 	Context ctx;
 	
 	public boolean isRun = true;
-	public Socket client = null;
 	public static OutputStream  out = null;
 	public static InputStream in = null;
 	SharedPreferences sp;
-	
-	/*
-	public SocThread(Handler handlerin ,Handler handlerout , Context context){
-		inHandler = handlerin;
-		outHandler = handlerout;
-		ctx = context;
-		Log.d(tag, "创建线程socket");
-	}*/
 	
 	/**
 	 * 链接socket服务器
@@ -57,10 +48,7 @@ public class SocThread extends Thread{
 		//打开本地socket串口
 		com3.Open(3, 115200);
 		Log.d(tag, "串口已经打开");
-			/*连接服务器 并设置连接超时为5秒  
-        	 *  socket = new Socket();  
-        	 *	socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
-			 * */
+			/*连接服务器 并设置连接超时为5秒   */
 			socket = new Socket();  
 			try {
 				socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
@@ -75,7 +63,7 @@ public class SocThread extends Thread{
 			client.setSoTimeout(timeout);//设置阻塞时间
 			Log.i(tag, "链接成功");*/
 			try {
-				in = socket.getInputStream();
+				//in = socket.getInputStream();//接收数据
 				out = socket.getOutputStream();//发送数据
 				Log.i(tag, "输入输出流获取成功");
 			} catch (IOException e) {
@@ -105,28 +93,53 @@ public class SocThread extends Thread{
 		Log.i(tag, "1.run开始");
 		String line = "";
 		while (isRun) {
-			try {
-				if (client != null) {
-					Log.i(tag, "2.检测数据");
-					while (in != null) {
-						Log.i(tag, "3.getdata" + line + " len=" + line.length());
-						Log.i(tag, "4.start set Message");
-						Message msg = inHandler.obtainMessage();
-						msg.obj = line;
-						inHandler.sendMessage(msg);// 结果返回给UI处理
-						Log.i(tag, "5.send to handler");
-					}
-				} 
-			} catch (Exception e) {
-				Log.i(tag, "数据接收错误" + e.getMessage());
-				e.printStackTrace();
+			//发送数据
+			int[] RX = com3.Read();
+			if(RX != null){
+				/**
+				 * 此处可能有BUG ，out.是根据
+				 * **/
+				try {
+					out = socket.getOutputStream();//发送数据
+					for(int i = 0 ; i<RX.length ; i++)
+						try {
+							out.write(RX[i]);
+							out.flush();
+							Log.d(tag, "data 已发送");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			/*try {
+				Log.i(tag, "2.检测数据");
+				in = socket.getInputStream();//接收数据
+					BufferedReader bff = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					String data = bff.readLine();
+					Log.d(tag, "Data 已接收" + data);
+					
+				Log.i(tag, "3.getdata" + line + " len=" + line.length());
+				Log.i(tag, "4.start set Message");
+				Message msg = inHandler.obtainMessage();
+				msg.obj = line;
+				inHandler.sendMessage(msg);// 结果返回给UI处理
+				Log.i(tag, "5.send to handler");
+			}catch (Exception e) {
+				Log.i(tag, "数据接收错误" + e.getMessage());
+				e.printStackTrace();
+			}*/
 		}
 	}
 
@@ -134,38 +147,6 @@ public class SocThread extends Thread{
 	 * 发送数据
 	 * 
 	 * @param mess
-	 */
-	public void Send(String mess) {
-		
-		while(true){
-		
-		int[] RX = com3.Read();
-		if(RX != null){
-			
-			/**
-			 * 此处可能有BUG ，out.是根据
-			 * **/
-			for(int i = 0 ; i<RX.length ; i++)
-				try {
-					out.write(RX[i]);
-					out.flush();
-					Log.d(tag, "data 已发送");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}else {
-			Log.d(tag, "发送失败，重新连接");
-			conn();
-		}
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		}
 		
 		/**try {
 			if (client != null) {
@@ -195,8 +176,8 @@ public class SocThread extends Thread{
 		} finally {
 			Log.i(tag, "发送完毕");
 
-		}*/
-	}
+		}
+	}*/
 	
 	static {
         System.loadLibrary("serialtest");
