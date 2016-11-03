@@ -24,6 +24,9 @@ public class SocThread extends Thread{
 	//读取串口
 	public  Socket socket = null;
 	serial com3 = new serial();
+	BufferedReader inputReader = null;
+	BufferedReader reader = null;
+	BufferedWriter writer = null;
 	
 	
 	private String ip = "192.168.11.123";//设置IP
@@ -52,6 +55,8 @@ public class SocThread extends Thread{
 			socket = new Socket();  
 			try {
 				socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				startWifiReplyListener(reader);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -70,6 +75,27 @@ public class SocThread extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}//接收数据
+	}
+
+	private void startWifiReplyListener(final BufferedReader reader) {
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					String response;
+					while ((response = reader.readLine()) != null){
+						Log.d(tag, "Data 已读取" + response );
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
 	}
 
 	/*

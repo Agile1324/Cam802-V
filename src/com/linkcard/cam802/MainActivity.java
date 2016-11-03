@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
@@ -152,7 +153,8 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		Socket socket = null;
 		
 		try{
-			socket = new Socket("192.168.11.123", 2001);//链接
+			socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
+			Log.i("socket thread", "主线程链接成功");
 			wifiReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			inputReader = new BufferedReader(new InputStreamReader(null));
 			startServerReplyListener(wifiReader);
