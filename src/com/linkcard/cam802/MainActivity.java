@@ -141,26 +141,9 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		mVideoView = (LinkVideoView) findViewById(R.id.mVideoView);
 		mVideoView.setLinkVideoViewListener(this);
 		
-		tvInfo.setBackgroundColor(Color.argb(255, 0, 255, 0));
+		tvInfo.setBackgroundColor(Color.argb(0, 0, 0, 0));//背景透明
 		
 		checkValidation();
-		/*线程启动项*/
-		//com3.Open(3, 115200);
-		
-		//接收wifi数据
-		BufferedReader  inputReader = null;
-		BufferedReader  wifiReader = null;
-		Socket socket = null;
-		
-		try{
-			socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
-			Log.i("socket thread", "主线程链接成功");
-			wifiReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			inputReader = new BufferedReader(new InputStreamReader(null));
-			startServerReplyListener(wifiReader);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
 		
 		
 		//创建异步任务
@@ -171,14 +154,14 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 					Log.i(TAG, "mhandler接收到msg=" + msg.what);
 					if (msg.obj != null) {
 						String s = msg.obj.toString();
-						if (s.trim().length() > 0) {
-							Log.i(TAG, "mhandler接收到obj=" + s);
-							Log.i(TAG, "开始更新UI");
-							tvInfo.append("Server:" + s);
+						//if (s.trim().length() > 0) {
+							//Log.i(TAG, "mhandler接收到obj=" + s);
+							//Log.i(TAG, "开始更新UI");
+							tvInfo.setText("速度是:????" );
 							Log.i(TAG, "更新UI完毕");
-						} else {
-							Log.i(TAG, "没有数据返回不更新");
-						}
+						//} else {
+							//Log.i(TAG, "没有数据返回不更新");
+						//}
 					}
 				} catch (Exception ee) {
 					Log.i(TAG, "加载过程出现异常");
@@ -187,28 +170,16 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 			}
 		};startSocket();
 	}
-	
-	private void startServerReplyListener(final BufferedReader wifiReader) {
-		// TODO Auto-generated method stub
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String response;
-					while ((response = wifiReader.readLine()) != null) {
-						Log.d("socket thread", "Data 已接收" + response);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
-		
-	}
 
 	public void startSocket() {
-		socketThread = new SocThread();
+		socketThread = new SocThread(mhandler);
 		socketThread.start();
+	}
+	
+	public void stopSocket(){
+		socketThread.isRun = false;
+		socketThread.close();
+		socketThread = null;
 	}
 
 	@Override
@@ -737,6 +708,13 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 				});
             }	            	
         }, VersionCmdInfo.class);
+	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		stopSocket();
 	}
 	
 	@Override

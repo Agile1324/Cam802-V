@@ -11,6 +11,9 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+
+import com.linkcard.cam802.MainActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +21,8 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class SocThread extends Thread{
 
@@ -29,10 +34,7 @@ public class SocThread extends Thread{
 	BufferedWriter writer = null;
 	
 	
-	private String ip = "192.168.11.123";//设置IP
-	private int port = 2001;//设置端口
 	private String tag = "socket thread";
-	private int timeout = 5000 ; //超时时间
 	
 	Handler inHandler;//输入异步任务
 	Handler outHandler;//输出异步任务
@@ -42,6 +44,10 @@ public class SocThread extends Thread{
 	public static OutputStream  out = null;
 	public static InputStream in = null;
 	SharedPreferences sp;
+	
+	public SocThread(Handler handlerin) {
+		inHandler = handlerin;
+	}
 	
 	/**
 	 * 链接socket服务器
@@ -68,14 +74,15 @@ public class SocThread extends Thread{
 			client.setSoTimeout(timeout);//设置阻塞时间
 			Log.i(tag, "链接成功");*/
 			try {
-				//in = socket.getInputStream();//接收数据
 				out = socket.getOutputStream();//发送数据
-				Log.i(tag, "输入输出流获取成功");
+				Log.i(tag, "输出流获取成功");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}//接收数据
+			
 	}
+
 
 	private void startWifiReplyListener(final BufferedReader reader) {
 		// TODO Auto-generated method stub
@@ -85,9 +92,21 @@ public class SocThread extends Thread{
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					String response;
-					while ((response = reader.readLine()) != null){
-						Log.d(tag, "Data 已读取" + response );
+					int response = 0;
+				//	static int num=0;
+					byte[] rx = null;
+					rx = new byte[30];
+					int i = 0;
+				//	byte  tmp,i = 0;
+					while ((response = reader.read()) != -1){
+						byte c = (byte)response;
+						rx[i++] = c; 
+						Log.d(tag, "Data 已读取" + c);
+						Message msg = inHandler.obtainMessage();
+						msg.obj = c;
+						inHandler.sendMessage(msg);
+						if(i==30)
+							Log.d(tag, "Data 读取完成" );
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -95,18 +114,10 @@ public class SocThread extends Thread{
 				}
 			}
 		}).start();
-		
 	}
-
-	/*
-	private void initdate() {
-		// TODO Auto-generated method stub
-		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
-		ip = sp.getString("ipstr", ip);
-		port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
-		Log.i(tag, "获取到ip端口："+ ip + ";" +port);
-		
-	}*/
+	
+	
+	
 	/**
 	 * 实时接受数据
 	 */
@@ -117,7 +128,6 @@ public class SocThread extends Thread{
 		Log.i(tag, "线程socket开始运行");
 		conn();
 		Log.i(tag, "1.run开始");
-		String line = "";
 		while (isRun) {
 			//发送数据
 			int[] RX = com3.Read();
@@ -204,6 +214,23 @@ public class SocThread extends Thread{
 
 		}
 	}*/
+	
+	
+	/**
+	 * 关闭连接
+	 */
+	public void close() {
+		try {
+			if (socket != null) {
+				in.close();
+				out.close();
+				socket.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	static {
         System.loadLibrary("serialtest");
