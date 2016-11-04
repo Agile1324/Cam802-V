@@ -107,7 +107,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 		
-		/****** Service后台程序
+		/****** Service后台程序 暂时未启用
 		startIntent = new Intent(MainActivity.this, ServiceTest.class);
 		startService(startIntent);//启动服务
 		Log.d("ServiceText", "Intent onCreate");
@@ -184,7 +184,6 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		if (!isStreaming) {
 			mVideoView.startPlayback();

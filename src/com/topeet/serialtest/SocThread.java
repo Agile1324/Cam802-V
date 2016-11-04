@@ -64,15 +64,9 @@ public class SocThread extends Thread{
 				reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				startWifiReplyListener(reader);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
    		 	Log.d(tag, "wifi 已链接");
-   		 	/*
-			Log.i(tag, "链接中");
-			client = new Socket(ip , port);
-			client.setSoTimeout(timeout);//设置阻塞时间
-			Log.i(tag, "链接成功");*/
 			try {
 				out = socket.getOutputStream();//发送数据
 				Log.i(tag, "输出流获取成功");
@@ -85,19 +79,15 @@ public class SocThread extends Thread{
 
 
 	private void startWifiReplyListener(final BufferedReader reader) {
-		// TODO Auto-generated method stub
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				try {
 					int response = 0;
-				//	static int num=0;
 					byte[] rx = null;
 					rx = new byte[30];
 					int i = 0;
-				//	byte  tmp,i = 0;
 					while ((response = reader.read()) != -1){
 						byte c = (byte)response;
 						rx[i++] = c; 
@@ -124,7 +114,6 @@ public class SocThread extends Thread{
 	@Override
 	public void run() {
 		//打开本地socket串口
-
 		Log.i(tag, "线程socket开始运行");
 		conn();
 		Log.i(tag, "1.run开始");
@@ -132,9 +121,6 @@ public class SocThread extends Thread{
 			//发送数据
 			int[] RX = com3.Read();
 			if(RX != null){
-				/**
-				 * 此处可能有BUG ，out.是根据
-				 * **/
 				try {
 					out = socket.getOutputStream();//发送数据
 					for(int i = 0 ; i<RX.length ; i++)
@@ -143,78 +129,21 @@ public class SocThread extends Thread{
 							out.flush();
 							Log.d(tag, "data 已发送");
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			/*try {
-				Log.i(tag, "2.检测数据");
-				in = socket.getInputStream();//接收数据
-					BufferedReader bff = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String data = bff.readLine();
-					Log.d(tag, "Data 已接收" + data);
-					
-				Log.i(tag, "3.getdata" + line + " len=" + line.length());
-				Log.i(tag, "4.start set Message");
-				Message msg = inHandler.obtainMessage();
-				msg.obj = line;
-				inHandler.sendMessage(msg);// 结果返回给UI处理
-				Log.i(tag, "5.send to handler");
-			}catch (Exception e) {
-				Log.i(tag, "数据接收错误" + e.getMessage());
-				e.printStackTrace();
-			}*/
 		}
 	}
-
-	/**
-	 * 发送数据
-	 * 
-	 * @param mess
-		
-		/**try {
-			if (client != null) {
-				Log.i(tag, "发送" + mess + "至"
-						+ client.getInetAddress().getHostAddress() + ":"
-						+ String.valueOf(client.getPort()));
-				out.println(mess);
-				out.flush();
-				Log.i(tag, "发送成功");
-				Message msg = outHandler.obtainMessage();
-				msg.obj = mess;
-				msg.what = 1;
-				outHandler.sendMessage(msg);// 结果返回给UI处理
-			} else {
-				Log.i(tag, "client 不存在");
-				Message msg = outHandler.obtainMessage();
-				msg.obj = mess;
-				msg.what = 0;
-				outHandler.sendMessage(msg);// 结果返回给UI处理
-				Log.i(tag, "连接不存在重新连接");
-				conn();
-			}
-
-		} catch (Exception e) {
-			Log.i(tag, "send error");
-			e.printStackTrace();
-		} finally {
-			Log.i(tag, "发送完毕");
-
-		}
-	}*/
-	
 	
 	/**
 	 * 关闭连接
