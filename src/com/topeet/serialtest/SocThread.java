@@ -80,23 +80,54 @@ public class SocThread extends Thread{
 
 	private void startWifiReplyListener(final BufferedReader reader) {
 		new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				try {
 					int response = 0;
-					byte[] rx = null;
-					rx = new byte[30];
+					int[] rx = new int[40];
+					//rx = new byte[30];  
 					int i = 0;
 					while ((response = reader.read()) != -1){
 						byte c = (byte)response;
 						rx[i++] = c; 
+
+						if(rx[0]!=0x3d)
+						{
+							i=0;
+						}
+						else if(i==2)
+						{
+							if(rx[1]!=0x01)
+							{
+							i=0;					
+							Log.d(tag, "Data 已读取 == 2");	
+							}
+					    }
+						else if(i==30)
+						{
+							i=0;
+							if(rx[29] == -1)
+							{
+								Log.d(tag, "Data 读取完成" );
+							//speed 
+							
+							//gps
+							
+							//power
+							
+							}
+						}
+						
+						
 						Log.d(tag, "Data 已读取" + c);
 						Message msg = inHandler.obtainMessage();
 						msg.obj = c;
 						inHandler.sendMessage(msg);
-						if(i==30)
-							Log.d(tag, "Data 读取完成" );
+					//	if(i==30)
+					//	{
+					//		i=0;
+					//		Log.d(tag, "Data 读取完成" );
+					//	}
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
