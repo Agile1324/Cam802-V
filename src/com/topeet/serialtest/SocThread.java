@@ -78,26 +78,28 @@ public class SocThread extends Thread{
 	}
 
 
+
+	
 	private void startWifiReplyListener(final BufferedReader reader) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					int response = 0;
-					int[] rx = new int[40];
-					//rx = new byte[30];  
-					int i = 0;
-					while ((response = reader.read()) != -1){
-						byte c = (byte)response;
-						rx[i++] = c; 
+					byte response = 0 ;    //定义response int类型
+					byte [] rx = new byte [40]; // 定义rx数组最大为40
+					int i = 0; //定义变量i=0
+					//while (response = reader.readLine() != null){
+					while ((response = (byte) reader.read()) != -1){ //单个读取，字符
+						byte  c = (byte) response; 
+						rx[i++] = c;   
 
-						if(rx[0]!=0x3d)
+						if(rx[0]!= 61)
 						{
 							i=0;
 						}
 						else if(i==2)
 						{
-							if(rx[1]!=0x01)
+							if(rx[1]!=0x00)
 							{
 							i=0;					
 							Log.d(tag, "Data 已读取 == 2");	
@@ -106,7 +108,7 @@ public class SocThread extends Thread{
 						else if(i==30)
 						{
 							i=0;
-							if(rx[29] == -1)
+							if(rx[29] == 0xff)
 							{
 								Log.d(tag, "Data 读取完成" );
 							//speed 
