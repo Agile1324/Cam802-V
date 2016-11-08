@@ -85,13 +85,14 @@ public class SocThread extends Thread{
 			@Override
 			public void run() {
 				try {
-					byte response = 0 ;    //定义response int类型
-					byte [] rx = new byte [40]; // 定义rx数组最大为40
+					String response  ;    //定义response int类型
+					int [] rx = new int [40]; // 定义rx数组最大为40
 					int i = 0; //定义变量i=0
 					//while (response = reader.readLine() != null){
-					while ((response = (byte) reader.read()) != -1){ //单个读取，字符
-						byte  c = (byte) response; 
-						rx[i++] = c;   
+					while ((response = reader.readLine()) != null ){ //单个读取，字符
+						
+						
+						//rx[i++] = response;   
 
 						if(rx[0]!= 61)
 						{
@@ -121,9 +122,9 @@ public class SocThread extends Thread{
 						}
 						
 						
-						Log.d(tag, "Data 已读取" + c);
+						Log.d(tag, "Data 已读取" + response);
 						Message msg = inHandler.obtainMessage();
-						msg.obj = c;
+						msg.obj = response;
 						inHandler.sendMessage(msg);
 					//	if(i==30)
 					//	{
