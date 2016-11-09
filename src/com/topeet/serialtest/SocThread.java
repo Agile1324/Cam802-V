@@ -63,6 +63,7 @@ public class SocThread extends Thread{
 				socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
 				//reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				//startWifiReplyListener(reader);
+				InputStream();
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -80,41 +81,38 @@ public class SocThread extends Thread{
 	/**
 	 * 暂时无法启动
 	 */
-	public void run(){
-		String[] Receive_date = null ;
-		conn();
-		int i_hex = 0;
-		while(true){
-			InputStream in;
-			try {
-				in = socket.getInputStream();
-				byte[] buffer = new byte[in.available()];
-				while(in.read(buffer) > 0){
-					for(int i = 0 ; i< buffer.length ; i++){
-						String hex = Integer.toHexString(buffer[i] &0xff);
+	private void InputStream(){
+		new Thread(new Runnable() {
+			public void run(){
+				String[] Receive_date = null ;
+				int speedLeft = 0;
+				int speedRight = 0;
+				while(true){
+					InputStream in;
+					try {
+						in = socket.getInputStream();
+						byte[] buffer = new byte[in.available()];
+				
+						//遍历数组，转换成String16进制字符串
+						while(in.read(buffer) > 0){
+							for(int i = 0 ; i< buffer.length ; i++){
+								String hex = Integer.toHexString(buffer[i] &0xff);
 						
-						Log.d(tag, hex);
-						if(hex.length() == 1){
-							hex = "0" +hex;
-						}else{
-							Receive_date[i] = hex ;
+								//Log.d(tag, hex);
+								if(hex.length() == 1){
+									hex = "0" +hex;
+								}
+							}
+							speedLeft = Integer.valueOf(buffer[4]);
+							Log.d(tag, "左轮速度是" + speedLeft + "档");
 						}
-						i_hex = Integer.valueOf(Receive_date[4] , 16);
-						
-						switch(i_hex){
-						
-						case 20:
-							Log.d(tag, "数字为20 时触发"+hex);
-						}
-						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			
-		}
+		}).start();
 	}
 
 
@@ -151,7 +149,7 @@ public class SocThread extends Thread{
 
 	/**
 	 * 实时接受数据
-	 *
+	 */
 	@Override
 	public void run() {
 		//打开本地socket串口
