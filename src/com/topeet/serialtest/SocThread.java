@@ -78,47 +78,22 @@ public class SocThread extends Thread{
 	}
 
 
-
-	
 	private void startWifiReplyListener(final BufferedReader reader) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					String response  ;    //定义response int类型
-					int [] rx = new int [40]; // 定义rx数组最大为40
-					int i = 0; //定义变量i=0
-					//while (response = reader.readLine() != null){
-					while ((response = reader.readLine()) != null ){ //单个读取，字符
+					byte response ;    
+					
+					int [] rx = new int [40]; 
+					int i = 0; 
+					//while ((response = reader.readLine()) != null){
+					while ((response = (byte) reader.read()) != -1 ){ //单个读取
+						rx[i++] = response;
 						
-						
-						//rx[i++] = response;   
-
-						if(rx[0]!= 61)
-						{
+						if(rx[0] == 3d){
 							i=0;
-						}
-						else if(i==2)
-						{
-							if(rx[1]!=0x00)
-							{
-							i=0;					
-							Log.d(tag, "Data 已读取 == 2");	
-							}
-					    }
-						else if(i==30)
-						{
-							i=0;
-							if(rx[29] == 0xff)
-							{
-								Log.d(tag, "Data 读取完成" );
-							//speed 
-							
-							//gps
-							
-							//power
-							
-							}
+							Log.d(tag, "打印第er行数据");
 						}
 						
 						
@@ -126,11 +101,6 @@ public class SocThread extends Thread{
 						Message msg = inHandler.obtainMessage();
 						msg.obj = response;
 						inHandler.sendMessage(msg);
-					//	if(i==30)
-					//	{
-					//		i=0;
-					//		Log.d(tag, "Data 读取完成" );
-					//	}
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -185,7 +155,7 @@ public class SocThread extends Thread{
 	public void close() {
 		try {
 			if (socket != null) {
-				in.close();
+				//in.close();
 				out.close();
 				socket.close();
 			}
