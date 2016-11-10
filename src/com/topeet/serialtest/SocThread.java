@@ -79,32 +79,43 @@ public class SocThread extends Thread{
 			
 	}
 	/**
-	 * 暂时无法启动
+	 * 实时接收wifi数据
 	 */
 	private void InputStream(){
 		new Thread(new Runnable() {
 			public void run(){
 				String[] Receive_date = null ;
+				byte[] buffer = new byte[29] ;
 				int speedLeft = 0;
 				int speedRight = 0;
 				while(true){
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					InputStream in;
 					try {
 						in = socket.getInputStream();
-						byte[] buffer = new byte[in.available()];
-				
+						 buffer = new byte[in.available()];
+
 						//遍历数组，转换成String16进制字符串
 						while(in.read(buffer) > 0){
-							for(int i = 0 ; i< buffer.length ; i++){
+							speedLeft = buffer[3];
+							Message msg = inHandler.obtainMessage();
+							msg.obj = speedLeft;
+							inHandler.sendMessage(msg);// 结果返回给UI处理
+							/*for(int i = 0 ; i< buffer.length ; i++){
 								String hex = Integer.toHexString(buffer[i] &0xff);
 						
 								//Log.d(tag, hex);
 								if(hex.length() == 1){
 									hex = "0" +hex;
 								}
-							}
-							speedLeft = Integer.valueOf(buffer[4]);
-							Log.d(tag, "左轮速度是" + speedLeft + "档");
+							}*/
+							//speedLeft = Integer.valueOf(buffer[4]);
+							//Log.d(tag, "左轮速度是" + speedLeft + "档");
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

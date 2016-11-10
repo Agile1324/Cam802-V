@@ -151,17 +151,16 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 			@Override
 			public void handleMessage(Message msg) {
 				try {
-					Log.i(TAG, "mhandler接收到msg=" + msg.what);
 					if (msg.obj != null) {
 						String s = msg.obj.toString();
-						//if (s.trim().length() > 0) {
+						if (s.trim().length() > 0 && s != "0" ) {
 							//Log.i(TAG, "mhandler接收到obj=" + s);
 							//Log.i(TAG, "开始更新UI");
-							tvInfo.setText("速度为：10档");
-							Log.i(TAG, "更新UI完毕");
-						//} else {
-							//Log.i(TAG, "没有数据返回不更新");
-						//}
+							tvInfo.setText("现在速度是：" + s +"档");
+							Log.i(TAG, "更新UI完毕" + s);
+						} else {
+							Log.i(TAG, "没有数据返回不更新");
+						}
 					}
 				} catch (Exception ee) {
 					Log.i(TAG, "加载过程出现异常");
