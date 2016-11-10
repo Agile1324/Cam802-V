@@ -120,7 +120,7 @@
         android:layout_marginRight="200dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="速度："
+        android:text=""
         android:textColor="#ffffff"
         />
 

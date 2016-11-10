@@ -18,6 +18,7 @@ import com.linkcard.cam802.MainActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -89,23 +90,27 @@ public class SocThread extends Thread{
 				int speedLeft = 0;
 				int speedRight = 0;
 				while(true){
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 					InputStream in;
 					try {
 						in = socket.getInputStream();
 						 buffer = new byte[in.available()];
-
-						//遍历数组，转换成String16进制字符串
 						while(in.read(buffer) > 0){
+							if(buffer[0] == 61){
+							
 							speedLeft = buffer[3];
+							speedRight = buffer[4]; 
+							Log.d(tag, "number is " + speedLeft);
 							Message msg = inHandler.obtainMessage();
+							//Bundle bundle = new Bundle();
+							
+							//msg.what = 0;
 							msg.obj = speedLeft;
 							inHandler.sendMessage(msg);// 结果返回给UI处理
+							
+							///msg.what = 1;
+							//msg.obj = speedRight;
+							//inHandler.sendMessage(msg);// 结果返回给UI处理
+							//遍历数组，转换成String16进制字符串
 							/*for(int i = 0 ; i< buffer.length ; i++){
 								String hex = Integer.toHexString(buffer[i] &0xff);
 						
@@ -117,6 +122,7 @@ public class SocThread extends Thread{
 							//speedLeft = Integer.valueOf(buffer[4]);
 							//Log.d(tag, "左轮速度是" + speedLeft + "档");
 						}
+						 }
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

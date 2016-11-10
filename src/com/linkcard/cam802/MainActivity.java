@@ -153,10 +153,10 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 				try {
 					if (msg.obj != null) {
 						String s = msg.obj.toString();
-						if (s.trim().length() > 0 && s != "0" ) {
+						if (s.trim().length() > 0) {
 							//Log.i(TAG, "mhandler接收到obj=" + s);
 							//Log.i(TAG, "开始更新UI");
-							tvInfo.setText("现在速度是：" + s +"档");
+							tvInfo.setText( s +"档");
 							Log.i(TAG, "更新UI完毕" + s);
 						} else {
 							Log.i(TAG, "没有数据返回不更新");
