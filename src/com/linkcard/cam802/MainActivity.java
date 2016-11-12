@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 						if (s.trim().length() > 0) {
 							//Log.i(TAG, "mhandler接收到obj=" + s);
 							//Log.i(TAG, "开始更新UI");
-							tvInfo.setText( s +"档");
+							tvInfo.setText( s );
 							Log.i(TAG, "更新UI完毕" + s);
 						} else {
 							Log.i(TAG, "没有数据返回不更新");

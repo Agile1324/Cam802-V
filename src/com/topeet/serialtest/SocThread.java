@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,26 +86,33 @@ public class SocThread extends Thread{
 	private void InputStream(){
 		new Thread(new Runnable() {
 			public void run(){
-				String[] Receive_date = null ;
-				byte[] buffer = new byte[29] ;
-				int speedLeft = 0;
-				int speedRight = 0;
+				byte[] buffer = new byte[30] ;
+				
+				String infomation ;//传输msg总体消息
+				
 				while(true){
 					InputStream in;
 					try {
 						in = socket.getInputStream();
 						 buffer = new byte[in.available()];
 						while(in.read(buffer) > 0){
-							if(buffer[0] == 61){
+							//判定数组长度
+							if(buffer.length >= 29){
+							//判定头尾
+							if(buffer[0] == 61 && buffer[29] == -1){
 							
-							speedLeft = buffer[3];
-							speedRight = buffer[4]; 
-							Log.d(tag, "number is " + speedLeft);
+							//经度：12-13；纬度14-15； 左轮速度3 右轮速度4  ；角度26
+							
+							infomation = "经度"+Integer.toString(buffer[12])+"."+Integer.toString(buffer[13])+"  纬度"+
+									Integer.toString(buffer[14])+"."+Integer.toString(buffer[15])+
+									"\n左轮 "+ Integer.toString(buffer[3]) + "档" + "\n" + "右轮 " + 
+									Integer.toString(buffer[4]) + "档\n"+"角度："+Integer.toString(buffer[26])
+									;
+							
 							Message msg = inHandler.obtainMessage();
 							//Bundle bundle = new Bundle();
 							
-							//msg.what = 0;
-							msg.obj = speedLeft;
+							msg.obj = infomation;
 							inHandler.sendMessage(msg);// 结果返回给UI处理
 							
 							///msg.what = 1;
@@ -121,6 +129,7 @@ public class SocThread extends Thread{
 							}*/
 							//speedLeft = Integer.valueOf(buffer[4]);
 							//Log.d(tag, "左轮速度是" + speedLeft + "档");
+						}
 						}
 						 }
 					} catch (IOException e) {
