@@ -87,7 +87,7 @@ public class SocThread extends Thread{
 		new Thread(new Runnable() {
 			public void run(){
 				byte[] buffer = new byte[30] ;
-				
+				String test;
 				String infomation ;//传输msg总体消息
 				
 				while(true){
@@ -96,15 +96,23 @@ public class SocThread extends Thread{
 						in = socket.getInputStream();
 						 buffer = new byte[in.available()];
 						while(in.read(buffer) > 0){
+							//打印数组
+							StringBuffer sbuf = new StringBuffer();
+							for (int i = 0; i < buffer.length; i++) {
+								sbuf.append(buffer[i]);
+							}
+							test = sbuf.toString();
+							Log.d(tag, "数组是："+ test);
 							//判定数组长度
 							if(buffer.length >= 29){
 							//判定头尾
 							if(buffer[0] == 61 && buffer[29] == -1){
 							
-							//经度：12-13；纬度14-15； 左轮速度3 右轮速度4  ；角度26
+								Log.d(tag, "判定成功，显示主界面");
+							//经度：11-12；纬度13-14； 左轮速度3 右轮速度4  ；角度26
 							
-							infomation = "经度"+Integer.toString(buffer[12])+"."+Integer.toString(buffer[13])+"  纬度"+
-									Integer.toString(buffer[14])+"."+Integer.toString(buffer[15])+
+							infomation = "经度"+Integer.toString(buffer[11])+"."+Integer.toString(buffer[12])+"  纬度"+
+									Integer.toString(buffer[13])+"."+Integer.toString(buffer[14])+
 									"\n左轮 "+ Integer.toString(buffer[3]) + "档" + "\n" + "右轮 " + 
 									Integer.toString(buffer[4]) + "档\n"+"角度："+Integer.toString(buffer[26])
 									;
