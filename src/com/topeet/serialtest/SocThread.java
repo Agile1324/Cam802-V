@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
+import java.net.ResponseCache;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -94,17 +95,19 @@ public class SocThread extends Thread{
 					InputStream in;
 					try {
 						in = socket.getInputStream();
-						 buffer = new byte[in.available()];
-						while(in.read(buffer) > 0){
+						 //buffer = new byte[in.available()];
+						int rcvLength;
+						while((rcvLength=in.read(buffer)) > 0){
 							//打印数组
 							StringBuffer sbuf = new StringBuffer();
 							for (int i = 0; i < buffer.length; i++) {
 								sbuf.append(buffer[i]);
 							}
 							test = sbuf.toString();
-							Log.d(tag, "数组是："+ test);
-							//判定数组长度
-							if(buffer.length >= 29){
+							Log.d(tag, "数组是："+ test +"  "+ rcvLength);
+							
+							//判定数组长度，如果等于30，则直接进行首位判定
+							if(rcvLength == 30){
 							//判定头尾
 							if(buffer[0] == 61 && buffer[29] == -1){
 							
@@ -127,17 +130,19 @@ public class SocThread extends Thread{
 							//msg.obj = speedRight;
 							//inHandler.sendMessage(msg);// 结果返回给UI处理
 							//遍历数组，转换成String16进制字符串
-							/*for(int i = 0 ; i< buffer.length ; i++){
+							for(int i = 0 ; i< buffer.length ; i++){
 								String hex = Integer.toHexString(buffer[i] &0xff);
 						
 								//Log.d(tag, hex);
 								if(hex.length() == 1){
 									hex = "0" +hex;
 								}
-							}*/
+							}
 							//speedLeft = Integer.valueOf(buffer[4]);
 							//Log.d(tag, "左轮速度是" + speedLeft + "档");
 						}
+						}else if(rcvLength > 1 &&rcvLength != 30){
+							
 						}
 						 }
 					} catch (IOException e) {
@@ -156,25 +161,29 @@ public class SocThread extends Thread{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-					//while ((response = reader.readLine()) != null){
-					while (!isInterrupted()){ 
-						int size;
-						try {
-						if(reader == null )return;
-							size = reader.read();
-							if(size > 0 ){
-								Log.d(tag, "打印数据");
-							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+				try {
+					//final StringBuffer buffer = new StringBuffer(); 
+					String response ;
+					String test;
+					while ((response = reader.readLine()) != null)
+					{
+						Log.d(tag, "数组是：" + response);
+						byte[] res = response.getBytes();
+						//打印数组
+						StringBuffer sbuf = new StringBuffer();
+						for(int i = 0 ; i < res.length; i++){
+							sbuf.append(res[i]);
 						}
-						
-						Log.d(tag, "Data 已读取" + response);
-						Message msg = inHandler.obtainMessage();
-						msg.obj = response;
-						inHandler.sendMessage(msg);
+						test = sbuf.toString();
+						Log.d(tag, "数组是:" + test);
+						//buffer.append(response);
+						//test = buffer.toString();
+						//Log.d(tag, "数据是:" + response);
 					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}*/
