@@ -64,9 +64,9 @@ public class SocThread extends Thread{
 			socket = new Socket();  
 			try {
 				socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
-				//reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				//startWifiReplyListener(reader);
-				InputStream();
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				startWifiReplyListener(reader);
+				//InputStream();
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -83,7 +83,7 @@ public class SocThread extends Thread{
 	}
 	/**
 	 * 实时接收wifi数据
-	 */
+	 *
 	private void InputStream(){
 		new Thread(new Runnable() {
 			public void run(){
@@ -152,11 +152,11 @@ public class SocThread extends Thread{
 				}
 			}
 		}).start();
-	}
+	}*/
 
 
 
-	/*
+	
 	private void startWifiReplyListener(final BufferedReader reader) {
 		new Thread(new Runnable() {
 			@Override
@@ -167,7 +167,6 @@ public class SocThread extends Thread{
 					String test;
 					while ((response = reader.readLine()) != null)
 					{
-						Log.d(tag, "数组是：" + response);
 						byte[] res = response.getBytes();
 						//打印数组
 						StringBuffer sbuf = new StringBuffer();
@@ -175,7 +174,7 @@ public class SocThread extends Thread{
 							sbuf.append(res[i]);
 						}
 						test = sbuf.toString();
-						Log.d(tag, "数组是:" + test);
+						Log.d(tag, "数组是:" + res);
 						//buffer.append(response);
 						//test = buffer.toString();
 						//Log.d(tag, "数据是:" + response);
@@ -186,7 +185,7 @@ public class SocThread extends Thread{
 				}
 			}
 		}).start();
-	}*/
+	}
 	
 	
 
@@ -228,18 +227,18 @@ public class SocThread extends Thread{
 	}
 	
 	/**
-	 * 关闭连接 暂时不用
+	 * 关闭连接 
 	 */
 	public void close() {
-		//try {
-		//	if (socket != null) {
-		//		//in.close();
-		//		out.close();
-		//	socket.close();
-		//	}
-		//} catch (Exception e) {
-		//	e.printStackTrace();
-		//}
+		try {
+			if (socket != null) {
+				in.close();
+				out.close();
+			socket.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 	
