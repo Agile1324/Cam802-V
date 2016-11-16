@@ -12,7 +12,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 		// TODO Auto-generated method stub
 		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) 
 		{ 
-			Intent activityStart = new Intent(context , MainActivity2.class);
+			Intent activityStart = new Intent(context , MainActivity.class);
 			activityStart.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(activityStart);  
 			Log.v("TAG", "开机自动服务自动启动.....");  

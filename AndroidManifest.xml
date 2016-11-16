@@ -30,7 +30,6 @@
             android:name="com.linkcard.cam802.LookbackActivity"
             android:screenOrientation="landscape" >
         </activity>
-        <service android:name="com.topeet.serialtest.ServiceTest"></service>
         
         <!-- receivers 开机启动  -->
         <receiver android:name="com.linkcard.cam802.BootBroadcastReceiver">

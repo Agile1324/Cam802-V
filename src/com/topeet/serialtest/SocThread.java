@@ -231,11 +231,8 @@ public class SocThread extends Thread{
 	 */
 	public void close() {
 		try {
-			if (socket != null) {
-				in.close();
 				out.close();
-			socket.close();
-			}
+				socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

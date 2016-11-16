@@ -54,7 +54,6 @@ import com.linkcard.cam802.ControlCmdHelper.ControlCmdListener;
 import com.linkcard.media.LinkVideoCore;
 import com.linkcard.media.LinkVideoView;
 import com.linkcard.media.LinkVideoView.LinkVideoViewListener;
-import com.topeet.serialtest.ServiceTest;
 import com.topeet.serialtest.SocThread;
 import com.topeet.serialtest.serial;
 
@@ -107,11 +106,6 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 		
-		/****** Service后台程序 暂时未启用
-		startIntent = new Intent(MainActivity.this, ServiceTest.class);
-		startService(startIntent);//启动服务
-		Log.d("ServiceText", "Intent onCreate");
-		*/
 		
 		linkStream = new LinkVideoCore();
 		linkStream.sysinit();//系统初始化
@@ -207,6 +201,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 						mVideoView.stopRecord();
 						mVideoView.stopPlayback();
 						dialog.dismiss();
+						//stopSocket();
 						MainActivity.this.finish();
 					}
 
@@ -718,8 +713,6 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
-	    stopService(startIntent);
-	    Log.d("ServiceTest", "Service 已结束");
 	}
 	
 }
