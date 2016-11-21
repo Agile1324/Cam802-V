@@ -27,6 +27,7 @@ import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//编码格式GBK
 public class SocThread extends Thread{
 
 	//读取串口
@@ -64,11 +65,12 @@ public class SocThread extends Thread{
 			socket = new Socket();  
 			try {
 				socket.connect(new InetSocketAddress("192.168.11.123", 2001), 5000);
+				while(true){
 				reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				startWifiReplyListener(reader);
+				startWifiReplyListener(reader);//开始监听事件
 				//InputStream();
-				
-			} catch (IOException e) {
+				}
+			} catch (IOException e) { 
 				e.printStackTrace();
 			}
    		 	Log.d(tag, "wifi 已链接");
@@ -78,7 +80,7 @@ public class SocThread extends Thread{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}//接收数据
+			}
 			
 	}
 	/**
@@ -163,18 +165,51 @@ public class SocThread extends Thread{
 			public void run() {
 				try {
 					//final StringBuffer buffer = new StringBuffer(); 
-					String response ;
-					String test;
-					while ((response = reader.readLine()) != null)
-					{
-						byte[] res = response.getBytes();
-						//打印数组
-						StringBuffer sbuf = new StringBuffer();
-						for(int i = 0 ; i < res.length; i++){
-							sbuf.append(res[i]);
+					int [] rx = new int [30]; 
+					int response  = 0;    
+					String infomation ;//msg传输文本
+					int i = 0; 
+					//while ((response = reader.readLine()) != null){
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					while ((response = reader.read()) != -1 ){ 
+						rx[i++] = response;
+						
+						if(rx[0] == 61 && rx[29] == 127 && i == 30){
+							Log.d(tag, "判定成功，显示主界面");
+						//经度：11-12；纬度13-14； 左轮速度3 右轮速度4  ；角度26
+						
+						infomation = "经度"+Integer.toString(rx[11])+"."+Integer.toString(rx[12])+"  纬度"+
+								Integer.toString(rx[13])+"."+Integer.toString(rx[14])+
+								"\n左轮 "+ Integer.toString(rx[3]) + "档" + "\n" + "右轮 " + 
+								Integer.toString(rx[4]) + "档\n"+"角度："+Integer.toString(rx[26])
+								;
+						
+						Message msg = inHandler.obtainMessage();
+						//Bundle bundle = new Bundle();
+						
+						msg.obj = infomation;
+						inHandler.sendMessage(msg);// 结果返回给UI处理
+						
+						i = 0 ;
+						
+						try {
+							Thread.sleep(200);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						test = sbuf.toString();
-						Log.d(tag, "数组是:" + res);
+						///msg.what = 1;
+						//msg.obj = speedRight;
+						//inHandler.sendMessage(msg);// 结果返回给UI处理
+						//遍历数组，转换成String16进制字符串
+						
+						}
 						//buffer.append(response);
 						//test = buffer.toString();
 						//Log.d(tag, "数据是:" + response);
@@ -182,6 +217,17 @@ public class SocThread extends Thread{
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}finally {
+					try {
+						if(reader != null)
+							reader.close();
+						if(socket != null)
+							socket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}
 		}).start();
@@ -224,6 +270,13 @@ public class SocThread extends Thread{
 			}
 			
 		}
+		try {
+			out.close();
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -231,7 +284,6 @@ public class SocThread extends Thread{
 	 */
 	public void close() {
 		try {
-				out.close();
 				socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -169,11 +169,6 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		socketThread.start();
 	}
 	
-	public void stopSocket(){
-		socketThread.isRun = false;
-		socketThread.close();
-		socketThread = null;
-	}
 
 	@Override
 	protected void onResume() {
@@ -705,9 +700,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		stopSocket();
 	}
 	
 	@Override
