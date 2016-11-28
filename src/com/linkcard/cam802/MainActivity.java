@@ -706,6 +706,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
+		System.exit(0);
 	}
 	
 }
