@@ -92,13 +92,15 @@ public class SocThread extends Thread{
 			public void run() {
 				try {
 					//final StringBuffer buffer = new StringBuffer(); 
-					int [] rx = new int [30]; 
+					int [] rx = new int [1024]; 
 					int response  = 0;    
+					String fx ;
+					String fxY;
 					String infomation ;//msg传输文本
 					int i = 0; 
 					//while ((response = reader.readLine()) != null){
 					try {
-						Thread.sleep(200);
+						Thread.sleep(2);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -108,18 +110,35 @@ public class SocThread extends Thread{
 						Log.i(tag, "1.while开始");
 						rx[i++] = response;
 						
-						if(rx[0] == 61 && rx[29] == 127 && i == 30){
-							Log.d(tag, "判定成功，显示主界面");
+						if(rx[0] != 61){
+							i = 0;
+						}
+						
+						
+						if(rx[0] == 61 && rx[9] == 127 && i == 10){
+							//Log.d(tag, "判定成功，显示主界面");
+							int directionP = rx[4] & 64 ;
+							int directionN = rx[5] & 64 ;
 						//经度：11-12；纬度13-14； 左轮速度3 右轮速度4  ；角度26
+							if( directionP != 0 ){
+								 fx = "反";
+							}else {
+								 fx = "正";
+							}
+							
+							if( directionN != 0 ){
+								 fxY = "反";
+							}else {
+								 fxY = "正";
+							}
 						
 						infomation = "经度"+Integer.toString(rx[11])+"."+Integer.toString(rx[12])+"  纬度"+
-								Integer.toString(rx[13])+"."+Integer.toString(rx[14])+
-								"\n左轮 "+ Integer.toString(rx[3]) + "档" + "\n" + "右轮 " + 
-								Integer.toString(rx[4]) + "档\n"+"角度："+Integer.toString(rx[26])
+								Integer.toString(rx[13])+"."+Integer.toString(rx[14]) +
+								"\n左轮 "+ fx + Integer.toString(rx[4]&0xbf) + "档" + "\n" + "右轮 " + fxY +
+								Integer.toString(rx[5]&0xbf) + "档\n"+"角度："+Integer.toString(rx[26])
 								;
 						
 						Message msg = inHandler.obtainMessage();
-						//Bundle bundle = new Bundle();
 						
 						msg.obj = infomation;
 						inHandler.sendMessage(msg);// 结果返回给UI处理
@@ -127,7 +146,7 @@ public class SocThread extends Thread{
 						i = 0 ;
 						
 						try {
-							Thread.sleep(200);
+							Thread.sleep(2);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -180,7 +199,7 @@ public class SocThread extends Thread{
 						}
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

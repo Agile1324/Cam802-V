@@ -26,13 +26,13 @@ public class CustomDialog extends Dialog {
 	}
 
 	public static class Builder {
-		private Context context; // 涓婁笅鏂囧璞�
-		private String title; // 瀵硅瘽妗嗘爣棰�
-		private String message; // 瀵硅瘽妗嗗唴瀹�
-		private String confirm_btnText; // 鎸夐挳鍚嶇О鈥滅‘瀹氣�
-		private String cancel_btnText; // 鎸夐挳鍚嶇О鈥滃彇娑堚�
-		private String neutral_btnText; // 鎸夐挳鍚嶇О鈥滈殣钘忊�
-		private View contentView; // 瀵硅瘽妗嗕腑闂村姞杞界殑鍏朵粬甯冨眬鐣岄潰
+		private Context context; // 环境
+		private String title; // 标题
+		private String message; // 消息
+		private String confirm_btnText; // 确认
+		private String cancel_btnText; // 取消
+		private String neutral_btnText; // 中立（忽略）
+		private View contentView; // 内容视图
 		/* 鎸夐挳鍧氭尯浜嬩欢 */
 		private DialogInterface.OnClickListener confirm_btnClickListener;
 		private DialogInterface.OnClickListener cancel_btnClickListener;
