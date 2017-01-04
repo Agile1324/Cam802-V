@@ -160,7 +160,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 					ee.printStackTrace();
 				}
 			}
-		};startSocket();
+		};
 	}
 
 	//新建Thread线程，启动socket
@@ -695,6 +695,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 					@Override
 					public void run() {
 						mBtnWifiOnOff.setImageResource(R.drawable.wifi_enabled);
+						startSocket();
 					}					
 				});
             }	            	
