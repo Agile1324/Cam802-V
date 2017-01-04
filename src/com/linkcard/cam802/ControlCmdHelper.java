@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+//¿ØÖÆÃüÁî¹¤¾ß
 public class ControlCmdHelper {
 	
 	

@@ -148,7 +148,6 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 					if (msg.obj != null) {
 						String s = msg.obj.toString();
 						if (s.trim().length() > 0) {
-							//Log.i(TAG, "mhandler接收到obj=" + s);
 							//Log.i(TAG, "开始更新UI");
 							tvInfo.setText( s );
 							Log.i(TAG, "更新UI完毕" + s);
@@ -164,6 +163,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		};startSocket();
 	}
 
+	//新建Thread线程，启动socket
 	public void startSocket() {
 		socketThread = new SocThread(mhandler);
 		socketThread.start();
@@ -268,6 +268,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		}
 	}
 
+	//按钮点击事件
 	public void onClick(View v) {
 		int ret = 0;
 		switch (v.getId()) {
@@ -670,6 +671,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 		}).start();
 	}
 	
+	//wifi set
 	private void doRequestWiFiStatus(){
 		if (isForceExit){
 			return;
@@ -682,6 +684,7 @@ public class MainActivity extends Activity implements OnClickListener, LinkVideo
 					@Override
 					public void run() {
 						mBtnWifiOnOff.setImageResource(R.drawable.wifi_disabled);
+						Toast.makeText(MainActivity.this, "网络已断开，正在重连", Toast.LENGTH_SHORT).show();
 					}					
 				});
             }

@@ -74,7 +74,7 @@ public class SocThread extends Thread{
 			} catch (IOException e) { 
 				e.printStackTrace();
 			}
-   		 	Log.d(tag, "wifi 已链接");//打印log，显示wifi链接情况
+ 		 	Log.d(tag, "wifi 已链接");//打印log，显示wifi链接情况
 			try {
 				out = socket.getOutputStream();//发送数据
 				Log.i(tag, "输出流获取成功");
@@ -146,7 +146,7 @@ public class SocThread extends Thread{
 						i = 0 ;
 						
 						try {
-							Thread.sleep(2);
+							Thread.sleep(50);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -193,13 +193,21 @@ public class SocThread extends Thread{
 							out = socket.getOutputStream();//发送数据
 							out.write(RX[i]);
 							out.flush();
-							Log.d(tag, "data 已发送");
+							Log.d(tag, "data 已发送" + RX[i]);
 						} catch (IOException e) {
+							Log.d(tag, "链接已断开，正在重新连接");
+							try {
+								Thread.sleep(3000);
+								conn();
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							e.printStackTrace();
 						}
 			}
 			try {
-				Thread.sleep(2);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -232,83 +240,8 @@ public class SocThread extends Thread{
 	}
 	
 	static {
-        System.loadLibrary("serialtest");
+      System.loadLibrary("serialtest");
 	}
 	
 	
 }
-
-
-
-/**
- * 实时接收wifi数据
- *
-	private void InputStream(){
-		new Thread(new Runnable() {
-			public void run(){
-				byte[] buffer = new byte[30] ;
-				String test;
-				String infomation ;//传输msg总体消息
-				
-				while(true){
-					InputStream in;
-					try {
-						in = socket.getInputStream();
-						 //buffer = new byte[in.available()];
-						int rcvLength;
-						while((rcvLength=in.read(buffer)) > 0){
-							//打印数组
-							StringBuffer sbuf = new StringBuffer();
-							for (int i = 0; i < buffer.length; i++) {
-								sbuf.append(buffer[i]);
-							}
-							test = sbuf.toString();
-							Log.d(tag, "数组是："+ test +"  "+ rcvLength);
-							
-							//判定数组长度，如果等于30，则直接进行首位判定
-							if(rcvLength == 30){
-							//判定头尾
-							if(buffer[0] == 61 && buffer[29] == -1){
-							
-								Log.d(tag, "判定成功，显示主界面");
-							//经度：11-12；纬度13-14； 左轮速度3 右轮速度4  ；角度26
-							
-							infomation = "经度"+Integer.toString(buffer[11])+"."+Integer.toString(buffer[12])+"  纬度"+
-									Integer.toString(buffer[13])+"."+Integer.toString(buffer[14])+
-									"\n左轮 "+ Integer.toString(buffer[3]) + "档" + "\n" + "右轮 " + 
-									Integer.toString(buffer[4]) + "档\n"+"角度："+Integer.toString(buffer[26])
-									;
-							
-							Message msg = inHandler.obtainMessage();
-							//Bundle bundle = new Bundle();
-							
-							msg.obj = infomation;
-							inHandler.sendMessage(msg);// 结果返回给UI处理
-							
-							///msg.what = 1;
-							//msg.obj = speedRight;
-							//inHandler.sendMessage(msg);// 结果返回给UI处理
-							//遍历数组，转换成String16进制字符串
-							for(int i = 0 ; i< buffer.length ; i++){
-								String hex = Integer.toHexString(buffer[i] &0xff);
-						
-								//Log.d(tag, hex);
-								if(hex.length() == 1){
-									hex = "0" +hex;
-								}
-							}
-							//speedLeft = Integer.valueOf(buffer[4]);
-							//Log.d(tag, "左轮速度是" + speedLeft + "档");
-						}
-						}else if(rcvLength > 1 &&rcvLength != 30){
-							
-						}
-						 }
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
-	}*/
